@@ -170,6 +170,7 @@ class SideNav extends Page {
 	// Opens a channel via rooms list
 	openChannel(channelName) {
 		cy.contains('[data-qa="sidebar-item-title"]', channelName).scrollIntoView().click();
+		cy.wait(100);
 		cy.get('.rcx-room-header').should('contain', channelName);
 	}
 
