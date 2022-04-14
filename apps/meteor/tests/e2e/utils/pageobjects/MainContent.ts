@@ -328,13 +328,56 @@ class MainContent extends BasePage {
 	}
 
 	public async setFileName(): Promise<void> {
-		await this.fileNameInput().click({ clickCount: 3 });
-		await this.keyboardPress('Backspace');
-		await this.fileNameInput().type('any_file1.txt');
+		await this.fileNameInput().fill('any_file1.txt');
 	}
 
 	public async setDescription(): Promise<void> {
 		await this.descriptionInput().type('any_description');
+	}
+
+	public async selectAction(action: string): Promise<void> {
+		switch (action) {
+			case 'edit':
+				await this.messageEdit().click();
+				await this.messageInput().type('this message was edited');
+				break;
+			case 'reply':
+				this.messageReply().click();
+				// flexTab.messageInput.type('this is a reply message');
+				break;
+			case 'delete':
+				await this.messageDelete().click();
+				break;
+			case 'permalink':
+				await this.messagePermalink().click();
+				break;
+			case 'copy':
+				await this.messageCopy().click();
+				break;
+			case 'quote':
+				await this.messageQuote().click();
+				await this.messageInput().type('this is a quote message');
+				break;
+			case 'star':
+				await this.messageStar().click();
+				break;
+			case 'unread':
+				await this.messageUnread().click();
+				break;
+			case 'reaction':
+				await this.messageReply().click();
+				await this.emojiPickerPeopleIcon().click();
+				await this.emojiGrinning().click();
+				break;
+			// case 'close':
+			// 	await this.messageClose().click();
+			// 	break;
+		}
+	}
+
+	public async openMessageActionMenu(): Promise<void> {
+		await this.messageOptionsBtn();
+		await this.messageOptionsBtn().click();
 	}
 }
 

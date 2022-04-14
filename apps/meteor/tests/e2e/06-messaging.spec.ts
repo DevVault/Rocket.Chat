@@ -3,12 +3,14 @@ import { expect, test } from '@playwright/test';
 import MainContent from './utils/pageobjects/MainContent';
 import SideNav from './utils/pageobjects/SideNav';
 import LoginPage from './utils/pageobjects/LoginPage';
+import FlexTab from './utils/pageobjects/FlexTab';
 import { adminLogin } from './utils/mocks/userAndPasswordMock';
 
 test.describe('[Messaging]', () => {
 	let loginPage: LoginPage;
 	let mainContent: MainContent;
 	let sideNav: SideNav;
+	let flexTab: FlexTab;
 	test.beforeAll(async ({ browser, baseURL }) => {
 		const context = await browser.newContext();
 		const page = await context.newPage();
@@ -16,8 +18,9 @@ test.describe('[Messaging]', () => {
 		loginPage = new LoginPage(page);
 		mainContent = new MainContent(page);
 		sideNav = new SideNav(page);
+		flexTab = new FlexTab(page);
 
-		loginPage.goto(baseURL as string);
+		await loginPage.goto(baseURL as string);
 
 		await loginPage.login(adminLogin);
 	});
@@ -123,13 +126,108 @@ test.describe('[Messaging]', () => {
 		});
 	});
 
-	// test.describe('[Messaging actions]', async () => {
-	// 	test.describe('[Render]', async () => {
+	test.describe('[Messaging actions]', async () => {
+		// test.beforeAll(async () => {
 
-	// 	})
-	// })
+		// })
+		// test.describe('[Render]', async () => {
 
-	// test.describe('[Usage]', async() => {
+		// });
 
-	// })
+		test.describe('[Usage]', async () => {
+			test.beforeAll(async () => {
+				await sideNav.general().click();
+			});
+			test.describe('Reply:', async () => {
+				test('it should reply the message', async () => {
+					await mainContent.selectAction('reply');
+					await flexTab.sendBtn().click();
+				});
+
+				// test('it should check if the message was replied', () => {
+				// 	mainContent.beforeLastMessageQuote.then(($el) => {
+				// 		const text = $el.data('id');
+				// 		mainContent.lastMessageQuote.should('has.attr', 'data-tmid', text);
+				// 	});
+				// 	flexTab.threadTab.click();
+				// });
+			});
+
+			test.describe('Edit:', async () => {
+				test.beforeAll(async () => {
+					await mainContent.sendMessage('Message for Message edit Tests');
+					// await mainContent.openMessageActionMenu();
+				});
+
+				test('it should edit the message', async () => {
+					// await mainContent.selectAction('edit');
+					// await mainContent.sendBtn().click();
+					await mainContent.lastMessage().hover();
+				});
+			});
+
+			// 		test.describe('Delete:', async () => {
+			// 			test.beforeAll(async () => {
+			// 				await mainContent.sendMessage('Message for Message Delete Tests');
+			// 				await mainContent.openMessageActionMenu();
+			// 			});
+
+			// 			test('it should delete the message', async () => {
+			// 				await mainContent.selectAction('delete');
+			// 			});
+
+			// 			test('it should not show the deleted message', async () => {
+			// 				await expect(mainContent.lastMessage()).not.toContainText('Message for Message Delete Tests')
+			// 			});
+			// 		});
+
+			// 		test.describe('Quote:', async () => {
+			// 			const message = `Message for quote Tests - ${Date.now()}`;
+
+			// 			test.beforeAll(async () => {
+			// 				await mainContent.sendMessage(message);
+			// 				await mainContent.openMessageActionMenu();
+			// 			});
+
+			// 			test('it should quote the message', async () => {
+			// 				await mainContent.selectAction('quote');
+			// 				await mainContent.sendBtn().click();
+			// 				//await mainContent.waitForLastMessageTextAttachmentEqualsText(message);
+			// 			});
+			// 		});
+
+			// 		test.describe('Star:', async () => {
+			// 			test.beforeAll( async () => {
+			// 				await mainContent.sendMessage('Message for star Tests');
+			// 				await mainContent.openMessageActionMenu();
+			// 			});
+
+			// 			test('it should star the message', async () => {
+			// 				await mainContent.selectAction('star');
+			// 			});
+			// 		});
+
+			// 		test.describe('Copy:', async () => {
+			// 			test.beforeAll(async () => {
+			// 				await mainContent.sendMessage('Message for copy Tests');
+			// 				await mainContent.openMessageActionMenu();
+			// 			});
+
+			// 			test('it should copy the message', async () => {
+			// 				await mainContent.selectAction('copy');
+			// 			});
+			// 		});
+
+			// 		test.describe('Permalink:', async () => {
+			// 			test.beforeAll(async () => {
+			// 				await mainContent.sendMessage('Message for permalink Tests');
+			// 				await mainContent.openMessageActionMenu();
+			// 			});
+
+			// 			test('it should permalink the message', async() => {
+			// 				await mainContent.selectAction('permalink');
+			// 			});
+			// 		});
+		});
+	});
 });

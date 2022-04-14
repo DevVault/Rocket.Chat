@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { v4 } from 'uuid';
+import { faker } from '@faker-js/faker';
 
 import ChannelCreation from './utils/pageobjects/ChannelCreation';
 import LoginPage from './utils/pageobjects/LoginPage';
@@ -23,7 +23,7 @@ test.describe('[Channel]', async () => {
 	test.describe('[Public and private channel creation]', () => {
 		let channelName: string;
 		test.beforeEach(async () => {
-			channelName = v4();
+			channelName = faker.name.firstName();
 		});
 
 		test('expect create privateChannel channel', async () => {
